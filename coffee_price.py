@@ -95,10 +95,10 @@ if __name__ == "__main__":
 	# fit network
 	history = lstm_model.fit(train_X, train_y, epochs=100, batch_size=100, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 	# plot history
-	plt.plot(history.history['loss'], label='train')
-	plt.plot(history.history['val_loss'], label='test')
-	plt.legend()
-	plt.show()
+	# plt.plot(history.history['loss'], label='train')
+	# plt.plot(history.history['val_loss'], label='test')
+	# plt.legend()
+	# plt.show()
 
 	# make a prediction
 	predicted_y = lstm_model.predict(test_X, batch_size=test_X.shape[0])
