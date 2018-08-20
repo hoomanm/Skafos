@@ -1,0 +1,7 @@
+skafossdk==1.0.0
+numpy
+pandas
+sklearn
+keras
+matplotlib
+

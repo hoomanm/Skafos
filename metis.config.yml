@@ -1,0 +1,7 @@
+project_token: fdfc221038b88640a5c2088e
+name: Skafos
+jobs: 
+  - job_id: 0131cb66-f671-44dd-a8c7-2d96b6caa74d
+    language: python
+    name: Main
+    entrypoint: "main.py"
