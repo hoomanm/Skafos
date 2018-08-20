@@ -43,24 +43,28 @@ df = pd.read_csv("coffee_2007-2018.csv")
 df = df.drop('date', axis=1)
 
 NUM_FEATURES = len(df.columns)
-print(NUM_FEATURES)
+print(df.describe())
+# print(NUM_FEATURES)
 
 data = df.values
+# print(data)
+# print(data.shape)
 
 # normalize features
 scaler = MinMaxScaler(feature_range=(-1, 1))
 scaled_data = scaler.fit_transform(data)
+# print(scaled_data)
 
 # frame as supervised learning
 supervised_data = series_to_supervised(scaled_data, NUM_TIME_STEPS)
 
-print(df.head())
-print(df.describe())
-print(supervised_data.head())
-print(supervised_data.describe())
+# print(df.head())
+# print(df.describe())
+# print(supervised_data.head())
+# print(supervised_data.describe())
 
 # drop columns we don't want to predict
-#supervised_data.drop(supervised_data.columns[[12,13,14]], axis=1, inplace=True)
+# supervised_data.drop(supervised_data.columns[[12,13,14]], axis=1, inplace=True)
 print(supervised_data.head())
 
 # split into train and test sets
@@ -88,7 +92,7 @@ lstm_model.add(LSTM(50, input_shape=(train_X.shape[1], train_X.shape[2])))
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-history = lstm_model.fit(train_X, train_y, epochs=50, batch_size=72, validation_data=(test_X, test_y), verbose=2, shuffle=False)
+history = lstm_model.fit(train_X, train_y, epochs=100, batch_size=100, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 # plot history
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='test')
@@ -96,8 +100,8 @@ plt.legend()
 plt.show()
 
 # make a prediction
-predicted_y = lstm_model.predict(test_X)
-print(predicted_y)
+predicted_y = lstm_model.predict(test_X, batch_size=test_X.shape[0])
+#print(predicted_y.shape)
 test_X = test_X.reshape((test_X.shape[0], NUM_TIME_STEPS * NUM_FEATURES))
 # invert scaling for forecast
 inv_predicted_y = np.concatenate((test_X[:, -NUM_FEATURES:-1], predicted_y), axis=1)
