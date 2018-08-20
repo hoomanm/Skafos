@@ -4,4 +4,4 @@ jobs:
   - job_id: 0131cb66-f671-44dd-a8c7-2d96b6caa74d
     language: python
     name: Main
-    entrypoint: "main.py"
+    entrypoint: "coffee_price.py"
