@@ -36,7 +36,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 
 if __name__ == "__main__":
 
-  	NUM_TIME_STEPS = 10
+	NUM_TIME_STEPS = 10
 
 	df = pd.read_csv("coffee_2007-2018.csv")
 
