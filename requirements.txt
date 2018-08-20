@@ -4,4 +4,5 @@ pandas
 sklearn
 keras
 matplotlib
+tensorflow
 
