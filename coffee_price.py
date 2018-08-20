@@ -9,6 +9,7 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from math import sqrt
 
+
 def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 	n_vars = 1 if type(data) is list else data.shape[1]
 	df = pd.DataFrame(data)
@@ -118,15 +119,3 @@ if __name__ == "__main__":
 
 	#df.close.plot()
 	#plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
