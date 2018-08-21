@@ -94,7 +94,7 @@ lstm_model.add(LSTM(5, batch_input_shape=(1, train_X.shape[1], train_X.shape[2])
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-for i in range(2):
+for i in range(5):
 	lstm_model.fit(train_X, train_y, epochs=1, batch_size=1, verbose=2, shuffle=False)
 	lstm_model.reset_states()
 #history = lstm_model.fit(train_X, train_y, epochs=500, batch_size=250, validation_data=(test_X, test_y), verbose=2, shuffle=False)
@@ -107,6 +107,7 @@ for i in range(2):
 
 # walk-forward validation on the test data
 predictions = list()
+true_values = list()
 for i in range(len(test_X)):
 	# make one-step forecast
 	#X, y = test_X[i, 0:-4], test_X[i, -1]
@@ -138,13 +139,14 @@ for i in range(len(test_X)):
 	#yhat = inverse_difference(raw_values, yhat, len(test_scaled)+1-i)
 	# store forecast
 	predictions.append(inv_predicted_y)
+	true_values.append(inv_y)
 	#expected = raw_values[len(train) + i + 1]
-	print('Day=%d, Predicted=%f, Expected=%f' % (i+1, inv_predicted_y, inv_y))
+	#print('Day=%d, Predicted=%f, Expected=%f' % (i+1, inv_predicted_y, inv_y))
 
 
 # report performance
-rmse = sqrt(mean_squared_error(test_y, predictions))
-mae = mean_absolute_error(test_y, predictions)
+rmse = sqrt(mean_squared_error(true_values, predictions))
+mae = mean_absolute_error(true_values, predictions)
 print('Test RMSE: %.3f' % rmse)
 print('Test MAE: %.3f' % mae)
 # line plot of observed vs predicted
