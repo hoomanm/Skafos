@@ -5,7 +5,7 @@ jobs:
     language: python
     name: Main
     entrypoint: "coffee_price.py"
-    schedule: "5,11 7 * * *"
+    schedule: "17,27 7 * * *"
     resources:
         limits:
             cpu: 8

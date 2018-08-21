@@ -91,11 +91,11 @@ print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
 
 # design network
 lstm_model = Sequential()
-lstm_model.add(LSTM(50, input_shape=(train_X.shape[1], train_X.shape[2])))
+lstm_model.add(LSTM(200, input_shape=(train_X.shape[1], train_X.shape[2])))
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-history = lstm_model.fit(train_X, train_y, epochs=200, batch_size=100, validation_data=(test_X, test_y), verbose=2, shuffle=False)
+history = lstm_model.fit(train_X, train_y, epochs=500, batch_size=300, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 # plot history
 #plt.plot(history.history['loss'], label='train')
 #plt.plot(history.history['val_loss'], label='test')
