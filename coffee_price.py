@@ -92,7 +92,7 @@ lstm_model.add(LSTM(75, input_shape=(train_X.shape[1], train_X.shape[2])))
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-history = lstm_model.fit(train_X, train_y, epochs=500, batch_size=250, validation_data=(test_X, test_y), verbose=2, shuffle=False)
+history = lstm_model.fit(train_X, train_y, epochs=600, batch_size=300, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 # plot history
 #plt.plot(history.history['loss'], label='train')
 #plt.plot(history.history['val_loss'], label='test')
