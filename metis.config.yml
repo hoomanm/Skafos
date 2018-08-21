@@ -5,3 +5,7 @@ jobs:
     language: python
     name: Main
     entrypoint: "coffee_price.py"
+    resources:
+        limits:
+            cpu: 4
+            memory: 2Gi
