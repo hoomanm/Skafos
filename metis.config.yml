@@ -5,17 +5,17 @@ jobs:
     language: python
     name: Main
     entrypoint: "coffee_price.py"
-    schedule: "45 3 * * *"
+    #schedule: "45 3 * * *"
     resources:
         limits:
             cpu: 8
             memory: 2Gi
-  - job_id: 055c9321-c376-4b0a-a8d0-25ed1b673086
-    language: python
-    name: Stateful_LSTM
-    entrypoint: "coffee_price_stateful.py"
-    schedule: "25 3 * * *"
-    resources:
-        limits:
-            cpu: 8
-            memory: 2Gi
+  # - job_id: 055c9321-c376-4b0a-a8d0-25ed1b673086
+  #   language: python
+  #   name: Stateful_LSTM
+  #   entrypoint: "coffee_price_stateful.py"
+  #   schedule: "25 3 * * *"
+  #   resources:
+  #       limits:
+  #           cpu: 8
+  #           memory: 2Gi
