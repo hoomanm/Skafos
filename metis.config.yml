@@ -10,7 +10,7 @@ jobs:
         limits:
             cpu: 8
             memory: 2Gi
-  - job_id:
+  - job_id: 055c9321-c376-4b0a-a8d0-25ed1b673086
     language: python
     name: Stateful_LSTM
     entrypoint: "coffee_price_stateful.py"
