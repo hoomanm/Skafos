@@ -7,5 +7,5 @@ jobs:
     entrypoint: "coffee_price.py"
     resources:
         limits:
-            cpu: 4
+            cpu: 6
             memory: 2Gi
