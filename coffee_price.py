@@ -33,8 +33,6 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 	return agg
 
 
-# Start
-
 NUM_TIME_STEPS = 20
 
 df = pd.read_csv("coffee_2007-2018.csv")
