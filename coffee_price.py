@@ -36,7 +36,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 
 # Start
 
-NUM_TIME_STEPS = 5
+NUM_TIME_STEPS = 1
 
 df = pd.read_csv("coffee_2007-2018.csv")
 
@@ -94,7 +94,7 @@ lstm_model.add(LSTM(5, batch_input_shape=(1, train_X.shape[1], train_X.shape[2])
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-for i in range(5):
+for i in range(2):
 	lstm_model.fit(train_X, train_y, epochs=1, batch_size=1, verbose=2, shuffle=False)
 	lstm_model.reset_states()
 #history = lstm_model.fit(train_X, train_y, epochs=500, batch_size=250, validation_data=(test_X, test_y), verbose=2, shuffle=False)
@@ -112,34 +112,45 @@ for i in range(len(test_X)):
 	#X, y = test_X[i, 0:-4], test_X[i, -1]
 	test_X_i = test_X[i,:].reshape(1, NUM_TIME_STEPS, NUM_FEATURES)
 	predicted_y = lstm_model.predict(test_X_i, batch_size=1)
-	predicted_y = predicted_y[:,0]
+	#predicted_y = predicted_y[:,0]
+	#print(predicted_y)
+	#print(test_data[i, -NUM_FEATURES:-1])
+	#reshaped_test_data = test_data
+	
 	# invert scaling
-	inv_predicted_y = np.concatenate((test_data[i, -NUM_FEATURES:-1], predicted_y), axis=1)
-	inv_predicted_y = scaler.inverse_transform(inv_predicted_y)
+	inv_predicted_y = np.concatenate((test_data[i, -NUM_FEATURES:-1].reshape(1, NUM_FEATURES-1), predicted_y), axis=1)
+	inv_predicted_y = scaler.inverse_transform(inv_predicted_y.reshape(1,-1))
 	inv_predicted_y = inv_predicted_y[:,-1]
 
 	test_y = test_y.reshape((len(test_y), 1))
-	inv_y = np.concatenate((test_data[i, -NUM_FEATURES:-1], test_y[i]), axis=1)
-	inv_y = scaler.inverse_transform(inv_y)
-	inv_y = inv_y[:,-1]
+	#print(test_y[i])
+	#test_row = test_data[i, -NUM_FEATURES:-1]
+	#test_row.append(test_y[i])
+	#print(test_row)
+	#test_row = test_row.reshape(1, NUM_FEATURES)
+	#print(test_data[i, -NUM_FEATURES:-1].shape)
+	#print(test_y[i].shape)
+	test_row = np.concatenate((test_data[i, -NUM_FEATURES:-1], test_y[i]))
+	inv_test = scaler.inverse_transform(test_row.reshape(1,-1))
+	inv_y = inv_test[:,-1]
 	#yhat = invert_scale(scaler, X, predicted_y)
 	# invert differencing
 	#yhat = inverse_difference(raw_values, yhat, len(test_scaled)+1-i)
 	# store forecast
-	predictions.append(predicted_y)
+	predictions.append(inv_predicted_y)
 	#expected = raw_values[len(train) + i + 1]
-	print('Day=%d, Predicted=%f, Expected=%f' % (i+1, predicted_y, inv_y))
+	print('Day=%d, Predicted=%f, Expected=%f' % (i+1, inv_predicted_y, inv_y))
 
 
 # report performance
-rmse = sqrt(mean_squared_error(inv_y, predictions))
-mae = mean_absolute_error(inv_y, predictions)
+rmse = sqrt(mean_squared_error(test_y, predictions))
+mae = mean_absolute_error(test_y, predictions)
 print('Test RMSE: %.3f' % rmse)
 print('Test MAE: %.3f' % mae)
 # line plot of observed vs predicted
-pyplot.plot(inv_y)
-pyplot.plot(predictions)
-pyplot.show()
+#plt.plot(test_data[:, -1])
+#plt.plot(predictions)
+#plt.show()
 
 # # make a prediction
 # predicted_y = lstm_model.predict(test_X, batch_size=test_X.shape[0])
