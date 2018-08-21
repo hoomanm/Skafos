@@ -34,7 +34,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 	return agg
 
 
-NUM_TIME_STEPS = 30
+NUM_TIME_STEPS = 40
 
 df = pd.read_csv("coffee_2007-2018.csv")
 
@@ -91,11 +91,11 @@ print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
 
 # design network
 lstm_model = Sequential()
-lstm_model.add(LSTM(240, input_shape=(train_X.shape[1], train_X.shape[2])))
+lstm_model.add(LSTM(320, input_shape=(train_X.shape[1], train_X.shape[2])))
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-history = lstm_model.fit(train_X, train_y, epochs=700, batch_size=400, validation_data=(test_X, test_y), verbose=2, shuffle=False)
+history = lstm_model.fit(train_X, train_y, epochs=1000, batch_size=500, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 # plot history
 #plt.plot(history.history['loss'], label='train')
 #plt.plot(history.history['val_loss'], label='test')
