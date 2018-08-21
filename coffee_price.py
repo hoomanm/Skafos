@@ -36,7 +36,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 
 # Start
 
-NUM_TIME_STEPS = 1
+NUM_TIME_STEPS = 5
 
 df = pd.read_csv("coffee_2007-2018.csv")
 
@@ -94,7 +94,7 @@ lstm_model.add(LSTM(5, batch_input_shape=(1, train_X.shape[1], train_X.shape[2])
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-for i in range(300):
+for i in range(5):
 	lstm_model.fit(train_X, train_y, epochs=1, batch_size=1, verbose=2, shuffle=False)
 	lstm_model.reset_states()
 #history = lstm_model.fit(train_X, train_y, epochs=500, batch_size=250, validation_data=(test_X, test_y), verbose=2, shuffle=False)
@@ -112,7 +112,7 @@ for i in range(len(test_X)):
 	#X, y = test_X[i, 0:-4], test_X[i, -1]
 	test_X_i = test_X[i,:].reshape(1, NUM_TIME_STEPS, NUM_FEATURES)
 	predicted_y = lstm_model.predict(test_X_i, batch_size=1)
-	predicted_y = predicted_y[0,0]
+	predicted_y = predicted_y[:,0]
 	# invert scaling
 	inv_predicted_y = np.concatenate((test_data[i, -NUM_FEATURES:-1], predicted_y), axis=1)
 	inv_predicted_y = scaler.inverse_transform(inv_predicted_y)
