@@ -94,7 +94,7 @@ lstm_model.add(LSTM(5, batch_input_shape=(1, train_X.shape[1], train_X.shape[2])
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-for i in range(100):
+for i in range(200):
 	lstm_model.fit(train_X, train_y, epochs=1, batch_size=1, verbose=2, shuffle=False)
 	lstm_model.reset_states()
 #history = lstm_model.fit(train_X, train_y, epochs=500, batch_size=250, validation_data=(test_X, test_y), verbose=2, shuffle=False)
