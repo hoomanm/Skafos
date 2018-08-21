@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -132,7 +133,9 @@ for i in range(len(test_X)):
 
 # report performance
 rmse = sqrt(mean_squared_error(inv_y, predictions))
+mae = mean_absolute_error(inv_y, predictions)
 print('Test RMSE: %.3f' % rmse)
+print('Test MAE: %.3f' % mae)
 # line plot of observed vs predicted
 pyplot.plot(inv_y)
 pyplot.plot(predictions)
