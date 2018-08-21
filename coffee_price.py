@@ -35,7 +35,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 
 # Start
 
-NUM_TIME_STEPS = 30
+NUM_TIME_STEPS = 20
 
 df = pd.read_csv("coffee_2007-2018.csv")
 
@@ -46,13 +46,13 @@ NUM_FEATURES = len(df.columns)
 print(df.describe())
 # print(NUM_FEATURES)
 
-data = df.values
+original_data = df.values
 # print(data)
 # print(data.shape)
 
 # normalize features
 scaler = MinMaxScaler(feature_range=(-1, 1))
-scaled_data = scaler.fit_transform(data)
+scaled_data = scaler.fit_transform(original_data)
 # print(scaled_data)
 
 # frame as supervised learning
@@ -66,13 +66,14 @@ supervised_data = series_to_supervised(scaled_data, NUM_TIME_STEPS)
 # drop columns we don't want to predict
 # supervised_data.drop(supervised_data.columns[[12,13,14]], axis=1, inplace=True)
 print(supervised_data.head())
+print(supervised_data.describe())
 
 # split into train and test sets
-data = supervised_data.values
-num_training_examples = int(data.shape[0] * 0.7)
+supervised_data_values = supervised_data.values
+num_training_examples = int(supervised_data_values.shape[0] * 0.7)
 #print("Training Examplessssss:", num_training_examples)
-train_data = data[:num_training_examples, :]
-test_data = data[num_training_examples:, :]
+train_data = supervised_data_values[:num_training_examples, :]
+test_data = supervised_data_values[num_training_examples:, :]
 
 # split into input and outputs
 train_X = train_data[:, :NUM_TIME_STEPS * NUM_FEATURES]
@@ -80,6 +81,9 @@ train_y = train_data[:, -1]
 
 test_X = test_data[:, :NUM_TIME_STEPS * NUM_FEATURES]
 test_y = test_data[:, -1]
+
+print(test_X.shape)
+print(test_y.shape)
 
 # reshape input to be 3D [samples, timesteps, features]
 train_X = train_X.reshape((train_X.shape[0], NUM_TIME_STEPS, NUM_FEATURES))
@@ -92,7 +96,7 @@ lstm_model.add(LSTM(75, input_shape=(train_X.shape[1], train_X.shape[2])))
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mae', optimizer='adam')
 # fit network
-history = lstm_model.fit(train_X, train_y, epochs=600, batch_size=300, validation_data=(test_X, test_y), verbose=2, shuffle=False)
+history = lstm_model.fit(train_X, train_y, epochs=300, batch_size=150, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 # plot history
 #plt.plot(history.history['loss'], label='train')
 #plt.plot(history.history['val_loss'], label='test')
@@ -101,15 +105,15 @@ history = lstm_model.fit(train_X, train_y, epochs=600, batch_size=300, validatio
 
 # make a prediction
 predicted_y = lstm_model.predict(test_X, batch_size=test_X.shape[0])
-#print(predicted_y.shape)
-test_X = test_X.reshape((test_X.shape[0], NUM_TIME_STEPS * NUM_FEATURES))
+# print(predicted_y.shape)
+# test_X = test_X.reshape((test_X.shape[0], NUM_TIME_STEPS * NUM_FEATURES))
 # invert scaling for forecast
-inv_predicted_y = np.concatenate((test_X[:, -NUM_FEATURES:-1], predicted_y), axis=1)
+inv_predicted_y = np.concatenate((test_data[:, -NUM_FEATURES:-1], predicted_y), axis=1)
 inv_predicted_y = scaler.inverse_transform(inv_predicted_y)
 inv_predicted_y = inv_predicted_y[:,-1]
 # invert scaling for actual
 test_y = test_y.reshape((len(test_y), 1))
-inv_y = np.concatenate((test_X[:, -NUM_FEATURES:-1], test_y), axis=1)
+inv_y = np.concatenate((test_data[:, -NUM_FEATURES:-1], test_y), axis=1)
 inv_y = scaler.inverse_transform(inv_y)
 inv_y = inv_y[:,-1]
 # calculate RMSE
